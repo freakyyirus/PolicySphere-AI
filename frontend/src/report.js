@@ -1,0 +1,78 @@
+// ============================================
+// Report Generator — PDF export via html2pdf.js
+// ============================================
+
+/* global html2pdf */
+
+const POLICY_LABELS = { tax: 'Tax Reform', subsidy: 'Subsidy', regulation: 'Regulation' };
+const SECTOR_LABELS = {
+  fuel: 'Fuel & Energy', healthcare: 'Healthcare', education: 'Education',
+  agriculture: 'Agriculture', technology: 'Technology', manufacturing: 'Manufacturing',
+  finance: 'Finance', energy: 'Energy',
+};
+
+export function downloadReport(result) {
+  if (!result) return;
+
+  const { impacts, riskScore, decision, explanation, policyType, sector, magnitude, duration } = result;
+  const now = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const pLabel = result.policyLabel || POLICY_LABELS[policyType];
+  const sLabel = result.sectorLabel || SECTOR_LABELS[sector];
+  const dec = decision;
+
+  const reportHTML = `
+    <div style="font-family:'Inter',Arial,sans-serif;padding:48px;color:#1e293b;max-width:800px;">
+      <div style="text-align:center;margin-bottom:36px;border-bottom:3px solid #3b82f6;padding-bottom:24px;">
+        <h1 style="font-size:28px;font-weight:800;margin:0 0 4px;color:#0f172a;">PolicySphere AI</h1>
+        <p style="font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:2px;margin:0;">Policy Risk Assessment Report</p>
+        <p style="font-size:12px;color:#94a3b8;margin:8px 0 0;">Generated: ${now}</p>
+      </div>
+      <div style="background:#f8fafc;border-radius:12px;padding:24px;margin-bottom:28px;">
+        <h2 style="font-size:16px;font-weight:700;margin:0 0 16px;color:#334155;">Policy Overview</h2>
+        <table style="width:100%;font-size:14px;border-collapse:collapse;">
+          <tr><td style="padding:8px 0;color:#64748b;width:40%;">Policy Type</td><td style="font-weight:600;">${pLabel}</td></tr>
+          <tr><td style="padding:8px 0;color:#64748b;">Sector</td><td style="font-weight:600;">${sLabel}</td></tr>
+          <tr><td style="padding:8px 0;color:#64748b;">Magnitude</td><td style="font-weight:600;">${magnitude}%</td></tr>
+          <tr><td style="padding:8px 0;color:#64748b;">Duration</td><td style="font-weight:600;">${duration === 'long' ? 'Long-term' : 'Short-term'}</td></tr>
+        </table>
+      </div>
+      <div style="text-align:center;margin-bottom:28px;padding:28px;border:2px solid ${riskScore<=35?'#10b981':riskScore<=65?'#f59e0b':'#ef4444'};border-radius:16px;">
+        <div style="font-size:48px;font-weight:900;color:${riskScore<=35?'#10b981':riskScore<=65?'#f59e0b':'#ef4444'};margin:0;">${riskScore}</div>
+        <div style="font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:1px;">Risk Score (out of 100)</div>
+        <div style="margin-top:12px;font-size:18px;font-weight:700;">${dec.icon} ${dec.label}</div>
+      </div>
+      <div style="margin-bottom:28px;">
+        <h2 style="font-size:16px;font-weight:700;margin:0 0 16px;color:#334155;">Economic Impact Breakdown</h2>
+        <table style="width:100%;font-size:14px;border-collapse:collapse;">
+          <tr style="background:#f1f5f9;"><th style="text-align:left;padding:10px 12px;">Indicator</th><th style="text-align:right;padding:10px 12px;">Impact</th></tr>
+          <tr><td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">Inflation</td><td style="text-align:right;padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;color:${impacts.inflation>0?'#ef4444':'#10b981'};">${impacts.inflation>0?'+':''}${impacts.inflation.toFixed(1)}%</td></tr>
+          <tr><td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">Employment</td><td style="text-align:right;padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;color:${impacts.employment>0?'#10b981':'#ef4444'};">${impacts.employment>0?'+':''}${impacts.employment.toFixed(1)}%</td></tr>
+          <tr><td style="padding:10px 12px;border-bottom:1px solid #e2e8f0;">GDP Growth</td><td style="text-align:right;padding:10px 12px;border-bottom:1px solid #e2e8f0;font-weight:600;color:${impacts.gdp>0?'#10b981':'#ef4444'};">${impacts.gdp>0?'+':''}${impacts.gdp.toFixed(1)}%</td></tr>
+          <tr><td style="padding:10px 12px;">Fiscal Deficit</td><td style="text-align:right;padding:10px 12px;font-weight:600;color:${impacts.fiscal>0?'#ef4444':'#10b981'};">${impacts.fiscal>0?'+':''}${impacts.fiscal.toFixed(1)}%</td></tr>
+        </table>
+      </div>
+      <div style="margin-bottom:28px;">
+        <h2 style="font-size:16px;font-weight:700;margin:0 0 12px;color:#334155;">AI Analysis</h2>
+        <p style="font-size:14px;line-height:1.8;color:#475569;background:#f8fafc;padding:20px;border-radius:12px;border-left:4px solid #3b82f6;margin:0;">${explanation}</p>
+      </div>
+      <div style="text-align:center;padding-top:24px;border-top:1px solid #e2e8f0;color:#94a3b8;font-size:11px;">
+        <p style="margin:0 0 4px;">This report is generated by PolicySphere AI for informational purposes only.</p>
+        <p style="margin:0;">It should not be considered as financial, legal, or governmental advice.</p>
+      </div>
+    </div>
+  `;
+
+  const container = document.getElementById('reportTemplate');
+  container.innerHTML = reportHTML;
+  container.style.display = 'block';
+
+  html2pdf().set({
+    margin: 0,
+    filename: `PolicySphere_Report_${policyType}_${sector}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).from(container).save().then(() => {
+    container.style.display = 'none';
+  });
+}
