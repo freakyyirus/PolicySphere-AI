@@ -1,3 +1,9 @@
+# PolicySphere AI 🌍
+
+<p align="center">
+  <img src="frontend/assets/readme-banner.png" alt="PolicySphere Intelligence Header" width="100%">
+</p>
+
 <p align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-blue?style=flat&logo=version&logoColor=white" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat&logo=open-source-initiative&logoColor=white" alt="License">
