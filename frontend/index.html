@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolicySphere AI — Autonomous Decision Engine for Policy Risk</title>
+  <meta name="description" content="Simulate economic impact, evaluate risk, and make data-driven policy decisions with AI-powered analysis.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='56' fill='%23fff'/%3E%3Ccircle cx='60' cy='60' r='54' fill='none' stroke='%23E5E7EB'/%3E%3Ccircle cx='60' cy='60' r='28' fill='none' stroke='%231E3A8A' stroke-width='2'/%3E%3Cellipse cx='60' cy='60' rx='28' ry='10' fill='none' stroke='%231E3A8A' stroke-width='1.5'/%3E%3Cline x1='60' y1='32' x2='60' y2='88' stroke='%231E3A8A' stroke-width='1.5'/%3E%3Cline x1='32' y1='60' x2='88' y2='60' stroke='%231E3A8A' stroke-width='1.5'/%3E%3Ccircle cx='60' cy='60' r='5' fill='%231E3A8A'/%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+  <!-- COOKIE CONSENT -->
+  <div class="cookie-banner" id="cookieBanner">
+    <p>We use cookies to enhance your experience. By continuing, you agree to our <a href="/cookies.html">Cookie Policy</a>.</p>
+    <div class="cookie-actions">
+      <button class="btn-cookie-accept" id="cookieAccept">Accept</button>
+      <button class="btn-cookie-decline" id="cookieDecline">Decline</button>
+    </div>
+  </div>
+
+  <!-- ANALYZING OVERLAY -->
+  <div class="analyzing-overlay" id="analyzingOverlay">
+    <div class="analyzing-spinner"></div>
+    <div class="analyzing-text">Analyzing Policy Impact...</div>
+    <div class="analyzing-subtext">Running economic models and risk assessment</div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeLoginModal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="modal-header">
+        <div class="modal-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        </div>
+        <h2>Welcome Back</h2>
+        <p>Sign in to access your saved analyses</p>
+      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email</label>
+          <input type="email" class="form-input" id="loginEmail" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required>
+        </div>
+        <div class="form-error" id="loginError" style="display: none;"></div>
+        <button type="submit" class="btn-primary" style="width: 100%;">
+          Sign In
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+      <div class="modal-footer">
+        <p>Don't have an account? <a href="#" id="showRegisterModal">Create one</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTER MODAL -->
+  <div class="modal-overlay" id="registerModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeRegisterModal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="modal-header">
+        <div class="modal-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        </div>
+        <h2>Create Account</h2>
+        <p>Sign up to save your analyses and access AI insights</p>
+      </div>
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="form-label" for="registerUsername">Username</label>
+          <input type="text" class="form-input" id="registerUsername" placeholder="Choose a username" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="registerEmail">Email</label>
+          <input type="email" class="form-input" id="registerEmail" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="registerPassword">Password</label>
+          <input type="password" class="form-input" id="registerPassword" placeholder="Create a password (min 6 chars)" required minlength="6">
+        </div>
+        <div class="form-error" id="registerError" style="display: none;"></div>
+        <button type="submit" class="btn-primary" style="width: 100%;">
+          Create Account
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+      <div class="modal-footer">
+        <p>Already have an account? <a href="#" id="showLoginModal">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       LANDING PAGE WRAPPER 
+       ============================================ -->
+  <div id="landing-page">
+
+  <!-- ============================================
+       HERO SECTION
+       ============================================ -->
+  <section id="hero">
+    <nav class="hero-nav">
+      <div class="logo">
+        <img src="/assets/logo.svg" alt="PolicySphere" class="logo-image">
+        <span class="logo-text">PolicySphere</span>
+      </div>
+      <ul class="hero-nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><button class="nav-login-btn" id="navLoginBtn">Sign In</button></li>
+        <li><a href="#" class="nav-cta" id="heroStartSimBtn">Get Started</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Enterprise-Grade Policy Intelligence
+        </div>
+        <h1>Navigate <span class="highlight">Policy Complexity</span><br>With Precision</h1>
+        <p>PolicySphere Intelligence provides real-time risk modeling and multi-domain impact foresight for global enterprises and sovereign institutions.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" id="startSimulation">Access Analytics <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+          <button class="btn-outline" id="viewDemo">Executive Briefing</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">10K+</span>
+            <span class="stat-label">Policies Analyzed</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">98%</span>
+            <span class="stat-label">Accuracy</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">Sectors</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <img src="/assets/hero-justice.png" alt="Policy Analysis" class="hero-image">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FEATURES SECTION
+       ============================================ -->
+  <section id="features" class="features-section">
+    <div class="features-container">
+      <div class="features-header">
+        <span class="features-badge">Features</span>
+        <h2>Everything You Need for Policy Analysis</h2>
+        <p>Comprehensive tools designed to help policymakers, economists, and researchers make informed decisions with confidence.</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3>Multi-Sector Analysis</h3>
+          <p>Analyze policies across 8 key economic sectors including healthcare, education, energy, technology, and more with sector-specific impact models.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3>Real-Time Risk Scoring</h3>
+          <p>Get instant risk assessments with our proprietary algorithm that evaluates multiple economic indicators simultaneously.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          </div>
+          <h3>AI-Powered Explanations</h3>
+          <p>Understand the "why" behind each analysis with natural language explanations generated by our explainable AI system.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <h3>Visual Dashboards</h3>
+          <p>Beautiful, intuitive visualizations including risk gauges, impact charts, and radar profiles for comprehensive data understanding.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+          </div>
+          <h3>PDF Report Generation</h3>
+          <p>Generate professional policy analysis reports in PDF format with one click. Perfect for presentations and documentation.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </div>
+          <h3>Scenario Comparison</h3>
+          <p>Save and compare policy scenarios side-by-side to identify the optimal approach for your objectives.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+          </div>
+          <h3>Economic Impact Metrics</h3>
+          <p>Track four critical indicators: inflation, employment, GDP growth, and fiscal deficit impact for complete analysis.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3>Short & Long-Term Analysis</h3>
+          <p>Evaluate both immediate and extended policy effects with duration-based modeling for comprehensive planning.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       HOW IT WORKS
+       ============================================ -->
+  <section id="how-it-works" class="how-section">
+    <div class="how-container">
+      <div class="how-header">
+        <span class="how-badge">How It Works</span>
+        <h2>Three Simple Steps</h2>
+        <p>Get comprehensive policy analysis in minutes</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Define Your Policy</h3>
+          <p>Select policy type, sector, and magnitude of change.</p>
+        </div>
+        <div class="step-arrow">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Run Analysis</h3>
+          <p>Our AI processes inputs through economic models.</p>
+        </div>
+        <div class="step-arrow">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Get Insights</h3>
+          <p>Receive detailed analysis with visualizations and reports.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       METRICS SECTION
+       ============================================ -->
+  <section class="metrics-section fade-in">
+    <div class="section-container">
+      <div class="metrics-row">
+        <div class="metric-item">
+          <div class="metric-value">4</div>
+          <div class="metric-name">Economic Indicators</div>
+          <div class="metric-desc">Inflation, Employment, GDP, Fiscal</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <div class="metric-value">8</div>
+          <div class="metric-name">Sectors Covered</div>
+          <div class="metric-desc">Healthcare to Technology</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <div class="metric-value">3</div>
+          <div class="metric-name">Policy Types</div>
+          <div class="metric-desc">Tax, Subsidy, Regulation</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <div class="metric-value">100%</div>
+          <div class="metric-name">AI-Powered</div>
+          <div class="metric-desc">Advanced Analysis Engine</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CTA SECTION
+       ============================================ -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2>Ready to Make Better Policy Decisions?</h2>
+      <p>Start analyzing policy impacts today. No signup required.</p>
+      <div class="cta-buttons">
+        <button class="btn-primary" id="ctaStart">Get Started Free</button>
+        <button class="btn-outline" id="ctaDemo">Try Demo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="/assets/logo.svg" alt="PolicySphere" class="footer-logo">
+        <span>PolicySphere</span>
+      </div>
+      <div class="footer-links">
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/disclaimer.html">Disclaimer</a>
+      </div>
+      <div class="footer-copy">© 2026 PolicySphere. All rights reserved.</div>
+    </div>
+  </footer>
+
+  </div>
+  <!-- END LANDING PAGE WRAPPER -->
+
+  <!-- ============================================
+       APP SECTION (Dashboard)
+       ============================================ -->
+  <section id="app-section" style="display: none;">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <img src="/assets/logo.svg" alt="PolicySphere Logo" class="logo-image">
+          <div class="sidebar-logo-text">
+            PolicySphere AI
+            <span>The Global Standard</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="sidebar-link active" data-section="dashboard-home">
+          <span class="link-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </span>
+          Dashboard
+        </a>
+        <a href="#" class="sidebar-link" data-section="policy-simulator">
+          <span class="link-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+          </span>
+          Policy Simulator
+        </a>
+        <a href="#" class="sidebar-link" data-section="risk-reports">
+          <span class="link-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </span>
+          Risk Reports
+        </a>
+        <a href="#" class="sidebar-link" data-section="comparison">
+          <span class="link-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </span>
+          Comparison
+        </a>
+        <a href="#" class="sidebar-link" data-section="document-analyzer">
+          <span class="link-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </span>
+          Document Analyzer
+        </a>
+        <a href="#" class="sidebar-link" data-section="policy-templates">
+          <span class="link-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          </span>
+          Templates
+        </a>
+        <a href="#" class="sidebar-link" data-section="ai-insights">
+          <span class="link-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 3.5 2 6.5 5 8v4h6v-4c3-1.5 5-4.5 5-8a8 8 0 0 0-8-8z"/><line x1="12" y1="10" x2="12" y2="16"/><circle cx="12" cy="6" r="1" fill="currentColor"/></svg>
+          </span>
+          AI Insights
+        </a>
+        <a href="#" class="sidebar-link" data-section="settings">
+          <span class="link-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </span>
+          Settings
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="sidebar-back-btn" id="backToHero">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back to Home
+        </button>
+      </div>
+    </aside>
+
+    <!-- Top Bar -->
+    <div class="app-topbar">
+      <div class="topbar-left">
+        <div class="app-logo">
+          <svg width="32" height="32" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="56" fill="#FFFFFF"/>
+            <circle cx="60" cy="60" r="54" fill="none" stroke="#E5E7EB" stroke-width="1"/>
+            <circle cx="60" cy="60" r="28" fill="none" stroke="#2563EB" stroke-width="2"/>
+            <ellipse cx="60" cy="60" rx="28" ry="10" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+            <line x1="60" y1="32" x2="60" y2="88" stroke="#2563EB" stroke-width="1.5"/>
+            <line x1="32" y1="60" x2="88" y2="60" stroke="#2563EB" stroke-width="1.5"/>
+            <circle cx="60" cy="60" r="5" fill="#2563EB"/>
+          </svg>
+        </div>
+        <div class="topbar-title">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-upload-btn" id="docUploadBtn" title="Upload Document">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span>Upload</span>
+        </button>
+        <div class="topbar-auth">
+          <button class="topbar-login-btn" id="showLoginBtn" style="display: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Sign In
+          </button>
+          <div class="topbar-user" id="userInfo" style="display: none;">
+            <span class="user-name" id="userName"></span>
+            <div class="topbar-avatar" id="userAvatar">P</div>
+            <div class="user-dropdown" id="userDropdown">
+              <button class="dropdown-item" id="logoutBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Main Content -->
+    <main class="dashboard-main">
+
+      <!-- DASHBOARD OVERVIEW (HOME) -->
+      <div class="dashboard-section active" id="dashboard-home">
+        <div class="welcome-header">
+          <h2 class="section-title">Welcome, <span id="welcomeUserName">Analyst</span></h2>
+          <p class="section-desc">Your policy analysis overview</p>
+        </div>
+        
+        <div class="dashboard-quick-links">
+          <div class="quick-link-card" data-section="policy-simulator">
+            <div class="quick-link-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div class="quick-link-text">
+              <h4>New Analysis</h4>
+              <p>Simulate a policy</p>
+            </div>
+          </div>
+          <div class="quick-link-card" data-section="document-analyzer">
+            <div class="quick-link-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="quick-link-text">
+              <h4>Analyze Document</h4>
+              <p>Upload or enter URL</p>
+            </div>
+          </div>
+          <div class="quick-link-card" data-section="policy-templates">
+            <div class="quick-link-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+            <div class="quick-link-text">
+              <h4>Use Template</h4>
+              <p>Start with pre-built</p>
+            </div>
+          </div>
+          <div class="quick-link-card" data-section="risk-reports">
+            <div class="quick-link-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+            </div>
+            <div class="quick-link-text">
+              <h4>My Reports</h4>
+              <p>View saved analyses</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="overview-stats">
+          <div class="card stat-card">
+            <div class="stat-icon" style="background: rgba(152, 128, 101, 0.1); color: var(--primary);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value" id="statTotalAnalyses">0</div>
+              <div class="stat-label">Total Analyses</div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value" id="statLowRisk">0</div>
+              <div class="stat-label">Low Risk</div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value" id="statMedRisk">0</div>
+              <div class="stat-label">Medium Risk</div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value" id="statHighRisk">0</div>
+              <div class="stat-label">High Risk</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card recent-activity">
+            <div class="card-header">
+              <h3>Recent Analyses</h3>
+              <a href="#" class="view-all" data-section="risk-reports">View All</a>
+            </div>
+            <div class="activity-list" id="recentActivityList">
+              <div class="empty-activity">No analyses yet. Start a new analysis!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POLICY SIMULATOR SECTION -->
+      <div class="dashboard-section" id="policy-simulator">
+        <div class="card" id="policyInputCard">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+            </div>
+            <div>
+              <h3>Policy Input Simulator</h3>
+              <p>Define a policy to analyze its economic impact</p>
+            </div>
+          </div>
+          <form class="policy-form" id="policyForm">
+            <div class="form-group">
+              <label class="form-label" for="policyType">Policy Type</label>
+              <select class="form-select" id="policyType">
+                <option value="" disabled selected>Select policy type</option>
+                <option value="tax">Tax Reform</option>
+                <option value="subsidy">Subsidy</option>
+                <option value="regulation">Regulation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sector">Sector</label>
+              <select class="form-select" id="sector">
+                <option value="" disabled selected>Select sector</option>
+                <option value="fuel">Fuel & Energy</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="education">Education</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="technology">Technology</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="finance">Finance</option>
+                <option value="energy">Energy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Magnitude (% Change)</label>
+              <div class="slider-container">
+                <input type="range" class="form-slider" id="magnitude" min="1" max="25" value="5">
+                <span class="slider-value" id="magnitudeValue">5%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Duration</label>
+              <div class="toggle-group">
+                <button type="button" class="toggle-btn active" data-value="short" id="toggleShort">Short-term</button>
+                <button type="button" class="toggle-btn" data-value="long" id="toggleLong">Long-term</button>
+              </div>
+            </div>
+            <button type="submit" class="btn-analyze" id="analyzeBtn">
+              <span class="btn-text">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Run Analysis
+              </span>
+              <span class="spinner"></span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Results -->
+        <div id="results-section">
+          <div class="results-top-row">
+            <div class="card gauge-wrapper">
+              <div class="card-header" style="width:100%">
+                <div class="card-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                </div>
+                <h3>Risk Score</h3>
+              </div>
+              <div class="gauge-canvas-container">
+                <canvas id="riskGauge"></canvas>
+                <div class="gauge-score" id="gaugeScore">0</div>
+              </div>
+              <div class="gauge-label" id="gaugeLabel">—</div>
+            </div>
+
+            <div class="card decision-card">
+              <div class="card-header" style="width:100%">
+                <div class="card-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+                </div>
+                <h3>AI Decision</h3>
+              </div>
+              <div class="decision-icon" id="decisionIcon">—</div>
+              <div class="decision-verdict" id="decisionVerdict">Awaiting analysis</div>
+              <div class="confidence-bar-wrapper">
+                <div class="confidence-bar-label">
+                  <span>Confidence</span>
+                  <span id="confidenceValue">—</span>
+                </div>
+                <div class="confidence-bar">
+                  <div class="confidence-bar-fill" id="confidenceFill" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card explanation-panel">
+              <div class="explanation-header">
+                <span class="ai-badge">AI Analysis</span>
+              </div>
+              <div class="explanation-text" id="explanationText">
+                Run a policy analysis to receive an AI-generated explanation.
+              </div>
+            </div>
+          </div>
+
+          <div class="metrics-grid" id="metricsGrid">
+            <div class="metric-card">
+              <div class="metric-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              </div>
+              <div class="metric-label">Inflation</div>
+              <div class="metric-value" id="metricInflation">—</div>
+              <div class="metric-trend" id="trendInflation">—</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div class="metric-label">Employment</div>
+              <div class="metric-value" id="metricEmployment">—</div>
+              <div class="metric-trend" id="trendEmployment">—</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+              </div>
+              <div class="metric-label">GDP Growth</div>
+              <div class="metric-value" id="metricGdp">—</div>
+              <div class="metric-trend" id="trendGdp">—</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div class="metric-label">Fiscal Deficit</div>
+              <div class="metric-value" id="metricFiscal">—</div>
+              <div class="metric-trend" id="trendFiscal">—</div>
+            </div>
+          </div>
+
+          <div class="charts-row">
+            <div class="card chart-container">
+              <div class="card-header">
+                <div class="card-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <h3>Impact Breakdown</h3>
+              </div>
+              <canvas id="impactChart"></canvas>
+            </div>
+            <div class="card chart-container">
+              <div class="card-header">
+                <div class="card-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <h3>Risk Profile</h3>
+              </div>
+              <canvas id="radarChart"></canvas>
+            </div>
+          </div>
+
+          <div class="comparison-actions">
+            <button class="btn-save-scenario" id="saveScenarioBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Save Scenario
+            </button>
+            <button class="btn-download" id="downloadReportBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download Report
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARISON SECTION -->
+      <div class="dashboard-section" id="comparison">
+        <h2 class="section-title">Scenario Comparison</h2>
+        <p class="section-desc">Compare saved policy analyses side-by-side</p>
+        <div class="comparison-grid" id="comparisonGrid">
+          <div class="card empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <p>No scenarios saved yet.<br>Run an analysis and click "Save Scenario".</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RISK REPORTS SECTION -->
+      <div class="dashboard-section" id="risk-reports">
+        <h2 class="section-title">Risk Reports</h2>
+        <p class="section-desc">View history of generated risk analyses</p>
+        
+        <div class="reports-filters">
+          <input type="text" class="form-input" id="reportsSearch" placeholder="Search analyses...">
+          <select class="form-select" id="reportsPolicyFilter">
+            <option value="">All Policy Types</option>
+            <option value="tax">Tax Reform</option>
+            <option value="subsidy">Subsidy</option>
+            <option value="regulation">Regulation</option>
+          </select>
+          <select class="form-select" id="reportsSectorFilter">
+            <option value="">All Sectors</option>
+            <option value="fuel">Fuel & Energy</option>
+            <option value="healthcare">Healthcare</option>
+            <option value="education">Education</option>
+            <option value="agriculture">Agriculture</option>
+            <option value="technology">Technology</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="finance">Finance</option>
+            <option value="energy">Energy</option>
+          </select>
+        </div>
+        
+        <div class="reports-list" id="reportsList">
+          <div class="card empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <p>Sign in to save and view your analysis history.<br>Run your first analysis from the Dashboard.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCUMENT ANALYZER SECTION -->
+      <div class="dashboard-section" id="document-analyzer">
+        <h2 class="section-title">Document & URL Analyzer</h2>
+        <p class="section-desc">Upload a policy document or paste a URL to analyze with AI</p>
+        
+        <div class="card" style="max-width: 800px;">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div>
+              <h3>Analyze Policy Document</h3>
+              <p>Paste policy text or enter a URL to analyze</p>
+            </div>
+          </div>
+          
+          <div class="doc-analyzer-tabs">
+            <button class="doc-tab-btn active" data-tab="text">Paste Text</button>
+            <button class="doc-tab-btn" data-tab="url">From URL</button>
+          </div>
+          
+          <div class="doc-analyzer-content">
+            <div class="doc-tab-content active" id="docTextTab">
+              <div class="form-group">
+                <label class="form-label" for="policyTextInput">Policy Text Content</label>
+                <textarea class="form-textarea" id="policyTextInput" rows="8" placeholder="Paste your policy document text here...
+
+Example: 'This tax reform policy aims to increase corporate tax rates by 15% for the technology sector. It includes provisions for research and development credits and aims to generate additional revenue of $10 billion annually.'"></textarea>
+              </div>
+            </div>
+            <div class="doc-tab-content" id="docUrlTab">
+              <div class="form-group">
+                <label class="form-label" for="policyUrlInput">Policy Document URL</label>
+                <input type="url" class="form-input" id="policyUrlInput" placeholder="https://example.com/policy-document">
+                <small style="color: var(--text-light);">Enter a URL to a policy document, article, or government website</small>
+              </div>
+            </div>
+          </div>
+          
+          <button type="button" class="btn-primary" id="analyzeDocBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Analyze Document
+          </button>
+          
+          <div class="doc-analysis-result" id="docAnalysisResult" style="display: none;">
+            <div class="doc-summary">
+              <h4>Summary</h4>
+              <p id="docSummaryText"></p>
+            </div>
+            <div class="doc-coverage">
+              <h4>Coverage Analysis</h4>
+              <div class="coverage-grid">
+                <div class="coverage-section">
+                  <h5>This Policy Covers:</h5>
+                  <ul id="docCoversList"></ul>
+                </div>
+                <div class="coverage-section">
+                  <h5>Not Covered:</h5>
+                  <ul id="docNotCoversList"></ul>
+                </div>
+              </div>
+            </div>
+            <div class="doc-impacts">
+              <h4>Economic Impact Analysis</h4>
+              <div class="impact-grid" id="docImpactGrid"></div>
+            </div>
+            <div class="doc-risk">
+              <div class="risk-badge" id="docRiskBadge"></div>
+            </div>
+            
+            <div class="doc-qa-section">
+              <h4>Ask Questions About This Policy</h4>
+              <div class="qa-input-row">
+                <input type="text" class="form-input" id="policyQuestionInput" placeholder="e.g., What are the risks of this policy? Who benefits?">
+                <button type="button" class="btn-secondary" id="askPolicyQuestionBtn">Ask</button>
+              </div>
+              <div class="qa-answers" id="qaAnswers"></div>
+            </div>
+          </div>
+          
+          <div class="auth-required-msg" id="docAnalyzerAuthMsg" style="display: none;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Please <a href="#" id="docAnalyzerAuthLogin">sign in</a> to use Document Analyzer.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- POLICY TEMPLATES SECTION -->
+      <div class="dashboard-section" id="policy-templates">
+        <h2 class="section-title">Policy Templates</h2>
+        <p class="section-desc">Start with pre-built policy scenarios for quick analysis</p>
+        
+        <div class="templates-filters">
+          <input type="text" class="form-input" id="templateSearch" placeholder="Search templates..." style="max-width: 300px;">
+          <div class="template-category-btns">
+            <button class="template-cat-btn active" data-category="">All</button>
+            <button class="template-cat-btn" data-category="environment">🌱 Environment</button>
+            <button class="template-cat-btn" data-category="technology">💻 Tech</button>
+            <button class="template-cat-btn" data-category="health">🏥 Health</button>
+            <button class="template-cat-btn" data-category="labor">💼 Labor</button>
+            <button class="template-cat-btn" data-category="education">📚 Education</button>
+          </div>
+        </div>
+        
+        <div class="templates-grid" id="templatesGrid">
+          <div class="template-card" data-id="carbon-tax">
+            <div class="template-icon">🌱</div>
+            <div class="template-name">Carbon Tax</div>
+            <div class="template-desc">Simulate carbon pricing to reduce emissions</div>
+            <div class="template-tags">
+              <span class="template-tag">tax</span>
+              <span class="template-tag">energy</span>
+            </div>
+          </div>
+          <div class="template-card" data-id="tech-subsidy">
+            <div class="template-icon">💻</div>
+            <div class="template-name">Tech R&D Subsidy</div>
+            <div class="template-desc">Government incentives for tech innovation</div>
+            <div class="template-tags">
+              <span class="template-tag">subsidy</span>
+              <span class="template-tag">technology</span>
+            </div>
+          </div>
+          <div class="template-card" data-id="healthcare-reform">
+            <div class="template-icon">🏥</div>
+            <div class="template-name">Healthcare Reform</div>
+            <div class="template-desc">Healthcare policy reform analysis</div>
+            <div class="template-tags">
+              <span class="template-tag">regulation</span>
+              <span class="template-tag">healthcare</span>
+            </div>
+          </div>
+          <div class="template-card" data-id="agriculture-subsidy">
+            <div class="template-icon">🌾</div>
+            <div class="template-name">Farm Subsidy</div>
+            <div class="template-desc">Support for agricultural sector</div>
+            <div class="template-tags">
+              <span class="template-tag">subsidy</span>
+              <span class="template-tag">agriculture</span>
+            </div>
+          </div>
+          <div class="template-card" data-id="minimum-wage">
+            <div class="template-icon">💼</div>
+            <div class="template-name">Minimum Wage</div>
+            <div class="template-desc">Labor market regulation analysis</div>
+            <div class="template-tags">
+              <span class="template-tag">regulation</span>
+              <span class="template-tag">labor</span>
+            </div>
+          </div>
+          <div class="template-card" data-id="green-energy-tax">
+            <div class="template-icon">☀️</div>
+            <div class="template-name">Green Energy Tax</div>
+            <div class="template-desc">Tax incentives for renewable energy</div>
+            <div class="template-tags">
+              <span class="template-tag">tax</span>
+              <span class="template-tag">energy</span>
+            </div>
+          </div>
+          <div class="template-card" data-id="education-reform">
+            <div class="template-icon">📚</div>
+            <div class="template-name">Education Investment</div>
+            <div class="template-desc">Funding for education sector</div>
+            <div class="template-tags">
+              <span class="template-tag">subsidy</span>
+              <span class="template-tag">education</span>
+            </div>
+          </div>
+          <div class="template-card" data-id="financial-reg">
+            <div class="template-icon">🏦</div>
+            <div class="template-name">Financial Regulation</div>
+            <div class="template-desc">Banking and finance oversight</div>
+            <div class="template-tags">
+              <span class="template-tag">regulation</span>
+              <span class="template-tag">finance</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="template-detail-modal" id="templateDetailModal" style="display: none;">
+          <div class="template-detail-content">
+            <button class="modal-close" id="closeTemplateDetail">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="template-detail-header">
+              <span class="template-icon-large" id="templateDetailIcon"></span>
+              <div>
+                <h3 id="templateDetailName"></h3>
+                <p id="templateDetailDesc"></p>
+              </div>
+            </div>
+            <div class="template-scenario">
+              <h4>Scenario Description</h4>
+              <p id="templateDetailScenario"></p>
+            </div>
+            <div class="template-outcomes">
+              <div class="outcomes-box">
+                <h4>Expected Outcomes</h4>
+                <ul id="templateDetailOutcomes"></ul>
+              </div>
+              <div class="risks-box">
+                <h4>Potential Risks</h4>
+                <ul id="templateDetailRisks"></ul>
+              </div>
+            </div>
+            <button class="btn-primary" id="runTemplateAnalysis">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Run This Analysis
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI INSIGHTS SECTION -->
+      <div class="dashboard-section" id="ai-insights">
+        <h2 class="section-title">AI Insights</h2>
+        <p class="section-desc">Get deeper analysis and recommendations from our AI engine</p>
+        
+        <div class="ai-status-bar" id="aiStatusBar">
+          <span class="ai-status-indicator" id="aiStatusIndicator"></span>
+          <span class="ai-status-text" id="aiStatusText">Checking AI status...</span>
+        </div>
+        
+        <div class="card" id="aiInsightsCard">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </div>
+            <div>
+              <h3>Generate Insights</h3>
+              <p>Get AI-powered recommendations based on your policy analysis</p>
+            </div>
+          </div>
+          <div class="ai-insights-form">
+            <div class="form-group">
+              <label class="form-label" for="aiPolicyType">Policy Type</label>
+              <select class="form-select" id="aiPolicyType">
+                <option value="tax">Tax Reform</option>
+                <option value="subsidy">Subsidy</option>
+                <option value="regulation">Regulation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="aiSector">Sector</label>
+              <select class="form-select" id="aiSector">
+                <option value="fuel">Fuel & Energy</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="education">Education</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="technology">Technology</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="finance">Finance</option>
+                <option value="energy">Energy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="aiMagnitude">Magnitude (% Change)</label>
+              <div class="slider-container">
+                <input type="range" class="form-slider" id="aiMagnitude" min="1" max="25" value="10">
+                <span class="slider-value" id="aiMagnitudeValue">10%</span>
+              </div>
+            </div>
+            <button type="button" class="btn-primary" id="generateInsightsBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Generate Insights
+            </button>
+          </div>
+          <div class="ai-insights-output" id="aiInsightsOutput" style="display: none;">
+            <div class="insights-header">
+              <span class="ai-badge">AI Recommendations</span>
+            </div>
+            <div class="insights-content" id="insightsContent"></div>
+          </div>
+          <div class="auth-required-msg" id="authRequiredMsg" style="display: none;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Please <a href="#" id="authRequiredLogin">sign in</a> to access AI Insights.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS SECTION -->
+      <div class="dashboard-section" id="settings">
+        <h2 class="section-title">Settings</h2>
+        <p class="section-desc">Configure your preferences</p>
+        <div class="card" style="max-width: 500px;">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <h3>Preferences</h3>
+          </div>
+          <div class="settings-list">
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Dark Mode</div>
+                <div class="settings-desc">Switch between light and dark theme</div>
+              </div>
+              <button class="toggle-switch" id="darkModeToggle" data-setting="darkMode">
+                <span class="toggle-slider"></span>
+              </button>
+            </div>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Auto-save Scenarios</div>
+                <div class="settings-desc">Save each analysis automatically</div>
+              </div>
+              <button class="toggle-switch" id="autoSaveToggle" data-setting="autoSave">
+                <span class="toggle-slider"></span>
+              </button>
+            </div>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Notifications</div>
+                <div class="settings-desc">Receive analysis alerts and updates</div>
+              </div>
+              <button class="toggle-switch" id="notificationsToggle" data-setting="notifications">
+                <span class="toggle-slider"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="max-width: 500px; margin-top: 20px;">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </div>
+            <h3>Export Data</h3>
+          </div>
+          <div class="settings-list">
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Export Analyses</div>
+                <div class="settings-desc">Download all your analyses as CSV or JSON</div>
+              </div>
+              <div class="export-buttons">
+                <button class="btn-sm" id="exportCsvBtn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  CSV
+                </button>
+                <button class="btn-sm" id="exportJsonBtn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  JSON
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" id="siteFooter">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <!-- Logo & Tagline -->
+        <div class="footer-brand">
+          <div class="logo">
+            <img src="/assets/logo.svg" alt="PolicySphere Logo" class="logo-image">
+            <div class="logo-text">
+              PolicySphere
+              <span>AI</span>
+            </div>
+          </div>
+          <p class="footer-tagline">The global standard for AI-powered policy intelligence and foresight.</p>
+          <div class="footer-socials">
+            <a href="#" class="social-link" title="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+            <a href="#" class="social-link" title="X (Twitter)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l11.733 16h4.267l-11.733-16z"/><path d="M4 20l6.768-6.768m2.46-2.46l6.772-6.772"/></svg></a>
+            <a href="#" class="social-link" title="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+          </div>
+        </div>
+
+        <!-- Platform -->
+        <div class="footer-links-col">
+          <h4>Platform</h4>
+          <ul class="footer-links">
+            <li><a href="#" id="footerLinkDashboard">Dashboard</a></li>
+            <li><a href="#" id="footerLinkSimulator">Simulator</a></li>
+            <li><a href="#" id="footerLinkAI">AI Insights</a></li>
+            <li><a href="#" id="footerLinkAnalyzer">Document Analyzer</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div class="footer-links-col">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">Security Model</a></li>
+            <li><a href="#">Methodology</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div class="footer-links-col">
+          <h4>Company</h4>
+          <ul class="footer-links">
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+            <li><a href="/security.html">Trust Center</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 PolicySphere AI. All rights reserved. Certified AI Safety Compliant.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="reportTemplate" style="display:none;"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
